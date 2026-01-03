@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FaPhone } from 'react-icons/fa';
 import logo from '../../assets/logo.png';
 import './Header.css';
 
@@ -21,10 +22,11 @@ const Header = () => {
             <li className="nav-item">
               <Link to="/about" className="nav-link">About</Link>
             </li>
-            <li className="nav-item">
-              <Link to="/contact" className="nav-link">Get in Touch</Link>
-            </li>
           </ul>
+          <Link to="/contact" className="header-cta-button">
+            <FaPhone className="call-icon" />
+            Get in Touch
+          </Link>
         </nav>
       </div>
     </header>
