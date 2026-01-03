@@ -54,6 +54,24 @@ const Home = () => {
             </div>
           </section>
 
+          <section className="vision-mission-section">
+            <div className="vision-mission-grid">
+              <div className="vision-mission-card">
+                <h2 className="vm-title">Our Vision</h2>
+                <p className="vm-text">
+                  To create an empowered, educated, and economically strong OBC community that participates actively in nation-building while preserving its cultural identity and constitutional rights.
+                </p>
+              </div>
+
+              <div className="vision-mission-card">
+                <h2 className="vm-title">Our Mission</h2>
+                <p className="vm-text">
+                  To protect reservation rights, provide educational support, offer legal assistance, and empower OBC communities through comprehensive development programs and political representation.
+                </p>
+              </div>
+            </div>
+          </section>
+
           <section className="communities-section">
             <h2 className="section-title">Communities We Represent</h2>
             <p className="communities-subtitle">

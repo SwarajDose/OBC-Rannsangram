@@ -326,6 +326,74 @@
   line-height: 1.5;
 }
 
+.vision-mission-section {
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+  animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.vision-mission-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.vision-mission-card {
+  background: #ffffff;
+  padding: 3rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+}
+
+.vision-mission-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-color: rgba(255, 68, 68, 0.15);
+}
+
+.vm-title {
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 1.25rem 0;
+  position: relative;
+  padding-bottom: 0.85rem;
+  text-align: center;
+  letter-spacing: -0.2px;
+}
+
+.vm-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 65px;
+  height: 3px;
+  background: linear-gradient(90deg, #ff8800, #ff4444);
+  border-radius: 2px;
+}
+
+.vm-text {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #555;
+  margin: 0;
+  text-align: center;
+  max-width: 100%;
+}
+
 .communities-section {
   margin-top: 3rem;
   animation: fadeInUp 0.8s ease-out 0.4s both;
@@ -454,6 +522,36 @@
     font-size: 1.2rem;
   }
 
+  .vision-mission-section {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .vision-mission-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 100%;
+  }
+
+  .vision-mission-card {
+    padding: 2.5rem 2rem;
+  }
+
+  .vm-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .vm-title::after {
+    width: 60px;
+  }
+
+  .vm-text {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
   .communities-section {
     margin-top: 2.5rem;
   }
@@ -525,6 +623,35 @@
 
   .about-text::before {
     font-size: 1.1rem;
+  }
+
+  .vision-mission-section {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .vision-mission-grid {
+    gap: 1.5rem;
+  }
+
+  .vision-mission-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .vm-title {
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.65rem;
+  }
+
+  .vm-title::after {
+    width: 55px;
+    height: 2.5px;
+  }
+
+  .vm-text {
+    font-size: 0.95rem;
+    line-height: 1.75;
   }
 
   .communities-subtitle {
