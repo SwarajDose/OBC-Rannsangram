@@ -19,11 +19,32 @@ const Header = () => {
     }
   };
 
+  const handleContactClick = (e) => {
+    e.preventDefault();
+    if (location.pathname === ROUTES.HOME) {
+      scrollToSection(SECTIONS.CONTACT);
+    } else {
+      navigateAndScroll(navigate, SECTIONS.CONTACT);
+    }
+  };
+
+  const handleHomeClick = (e) => {
+    e.preventDefault();
+    if (location.pathname === ROUTES.HOME) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      navigate(ROUTES.HOME);
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+    }
+  };
+
   return (
     <header className="header">
       <div className="header-container">
         <div className="logo-container">
-          <Link to="/" className="logo-link">
+          <Link to="/" className="logo-link" onClick={handleHomeClick}>
             <img src={logo} alt="OBC Rann Sangram Logo" className="logo-img" />
           </Link>
         </div>
@@ -31,16 +52,19 @@ const Header = () => {
         <nav className="nav">
           <ul className="nav-list">
             <li className="nav-item">
-              <Link to={ROUTES.HOME} className="nav-link">Home</Link>
+              <a href="#" onClick={handleHomeClick} className="nav-link">Home</a>
             </li>
             <li className="nav-item">
               <a href={`#${SECTIONS.ABOUT}`} onClick={handleAboutClick} className="nav-link">About</a>
             </li>
+            <li className="nav-item">
+              <a href={`#${SECTIONS.CONTACT}`} onClick={handleContactClick} className="nav-link">Contact Us</a>
+            </li>
           </ul>
-          <Link to={ROUTES.CONTACT} className="header-cta-button">
+          <a href={`#${SECTIONS.CONTACT}`} onClick={handleContactClick} className="header-cta-button">
             <FaPhone className="call-icon" />
             Get in Touch
-          </Link>
+          </a>
         </nav>
       </div>
     </header>

@@ -4,6 +4,7 @@
 export const ROUTES = {
   HOME: '/',
   CONTACT: '/contact',
+  ADMIN: '/admin',
 };
 
 /**
@@ -11,5 +12,7 @@ export const ROUTES = {
  */
 export const SECTIONS = {
   ABOUT: 'about-us',
+  OBJECTIVES: 'objectives-section',
+  CONTACT: 'contact-us',
 };
 

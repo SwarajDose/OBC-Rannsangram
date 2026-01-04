@@ -28,7 +28,7 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      <section className="hero-section" style={{ backgroundImage: `url(${heroImage})` }}>
+      <section id="hero" className="hero-section" style={{ backgroundImage: `url(${heroImage})` }}>
         <div className="hero-overlay"></div>
         <div className="hero-content">
           <h1 className="hero-title">
@@ -124,7 +124,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="objectives-section-standalone">
+      <section id={SECTIONS.OBJECTIVES} className="objectives-section-standalone">
         <div className="objectives-container">
           <h2 className="section-title">Working for Community Welfare</h2>
           <p className="objectives-subtitle">
@@ -221,6 +221,111 @@ const Home = () => {
                 </p>
               </div>
             </div>
+        </div>
+      </section>
+
+      <section id={SECTIONS.CONTACT} className="contact-section">
+        <div className="contact-container">
+          <h2 className="section-title">Contact Us</h2>
+          <p className="contact-subtitle">
+            Get in touch with us. Fill out the form below and we'll get back to you as soon as possible.
+          </p>
+          <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="fullName" className="form-label">Full Name *</label>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  className="form-input"
+                  placeholder="Enter your full name"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="mobile" className="form-label">Mobile Number *</label>
+                <input
+                  type="tel"
+                  id="mobile"
+                  name="mobile"
+                  className="form-input"
+                  placeholder="Enter your mobile number"
+                  pattern="[0-9]{10}"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="state" className="form-label">State *</label>
+                <input
+                  type="text"
+                  id="state"
+                  name="state"
+                  className="form-input"
+                  placeholder="Enter your state"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="district" className="form-label">District *</label>
+                <input
+                  type="text"
+                  id="district"
+                  name="district"
+                  className="form-input"
+                  placeholder="Enter your district"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="taluka" className="form-label">Taluka *</label>
+                <input
+                  type="text"
+                  id="taluka"
+                  name="taluka"
+                  className="form-input"
+                  placeholder="Enter your taluka"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="village" className="form-label">Village *</label>
+                <input
+                  type="text"
+                  id="village"
+                  name="village"
+                  className="form-input"
+                  placeholder="Enter your village"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="pincode" className="form-label">Pincode *</label>
+              <input
+                type="text"
+                id="pincode"
+                name="pincode"
+                className="form-input"
+                placeholder="Enter your pincode"
+                pattern="[0-9]{6}"
+                required
+              />
+            </div>
+
+            <div className="form-submit">
+              <button type="submit" className="submit-button">
+                Submit
+              </button>
+            </div>
+          </form>
         </div>
       </section>
     </div>
