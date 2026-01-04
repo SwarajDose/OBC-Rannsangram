@@ -119,29 +119,50 @@ const Admin = () => {
 
   useEffect(() => {
     // Check authentication
-    const isAuthenticated = localStorage.getItem('adminAuthenticated');
-    if (!isAuthenticated || isAuthenticated !== 'true') {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
       navigate('/admin/login');
       return;
     }
 
-    // Load users from localStorage or use dummy data
-    const storedUsers = localStorage.getItem('contactFormSubmissions');
-    if (storedUsers) {
-      const parsedUsers = JSON.parse(storedUsers);
-      // Merge dummy data with stored data (dummy data first)
-      const allUsers = [...dummyData, ...parsedUsers];
-      setUsers(allUsers);
-      setFilteredUsers(allUsers);
-    } else {
-      // If no stored data, use dummy data
-      setUsers(dummyData);
-      setFilteredUsers(dummyData);
-    }
+    // Verify token and load data
+    const loadData = async () => {
+      try {
+        const { authAPI, contactAPI } = await import('../../services/api');
+        
+        // Verify token
+        await authAPI.verify();
+        
+        // Load submissions from API
+        const response = await contactAPI.getAll();
+        
+        if (response.success) {
+          // Merge dummy data with API data (dummy data first)
+          const allUsers = [...dummyData, ...response.data];
+          setUsers(allUsers);
+          setFilteredUsers(allUsers);
+        }
+      } catch (error) {
+        console.error('Error loading data:', error);
+        // If API fails, use dummy data
+        setUsers(dummyData);
+        setFilteredUsers(dummyData);
+        
+        // If token is invalid, redirect to login
+        if (error.message.includes('token') || error.message.includes('401')) {
+          localStorage.removeItem('adminToken');
+          localStorage.removeItem('adminAuthenticated');
+          navigate('/admin/login');
+        }
+      }
+    };
+
+    loadData();
   }, [navigate]);
 
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
+      localStorage.removeItem('adminToken');
       localStorage.removeItem('adminAuthenticated');
       localStorage.removeItem('adminLoginTime');
       navigate('/admin/login');
@@ -220,18 +241,25 @@ const Admin = () => {
     setSortedUsers(sorted);
   }, [filteredUsers, sortField, sortDirection]);
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this submission?')) {
-      // Remove from users state
-      const updatedUsers = users.filter(user => user.id !== id);
-      setUsers(updatedUsers);
-      
-      // Update localStorage - only store non-dummy data
-      const storedUsers = localStorage.getItem('contactFormSubmissions');
-      if (storedUsers) {
-        const parsedUsers = JSON.parse(storedUsers);
-        const updatedStored = parsedUsers.filter(user => user.id !== id);
-        localStorage.setItem('contactFormSubmissions', JSON.stringify(updatedStored));
+      try {
+        // Check if it's dummy data (string ID) or real data (numeric ID)
+        const userToDelete = users.find(user => user.id === id);
+        const isDummyData = typeof id === 'string' && id.length < 10;
+        
+        if (!isDummyData) {
+          // Delete from API
+          const { contactAPI } = await import('../../services/api');
+          await contactAPI.delete(id);
+        }
+        
+        // Remove from users state
+        const updatedUsers = users.filter(user => user.id !== id);
+        setUsers(updatedUsers);
+      } catch (error) {
+        console.error('Error deleting submission:', error);
+        alert('Error deleting submission. Please try again.');
       }
     }
   };

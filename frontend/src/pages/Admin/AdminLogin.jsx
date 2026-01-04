@@ -11,24 +11,26 @@ const AdminLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
-    // Simple authentication (in production, this would be an API call)
-    // Default credentials: admin / admin123
-    setTimeout(() => {
-      if (username === 'admin' && password === 'admin123') {
-        // Store authentication in localStorage
+    try {
+      const { authAPI } = await import('../../services/api');
+      const response = await authAPI.login(username, password);
+
+      if (response.success) {
+        // Store authentication token
+        localStorage.setItem('adminToken', response.token);
         localStorage.setItem('adminAuthenticated', 'true');
         localStorage.setItem('adminLoginTime', new Date().toISOString());
         navigate('/admin');
-      } else {
-        setError('Invalid username or password');
-        setIsLoading(false);
       }
-    }, 500);
+    } catch (error) {
+      setError(error.message || 'Invalid username or password');
+      setIsLoading(false);
+    }
   };
 
   return (

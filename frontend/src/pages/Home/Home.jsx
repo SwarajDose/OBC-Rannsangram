@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   FaUsers, 
@@ -31,11 +31,14 @@ const Home = () => {
     scrollToSection(SECTIONS.CONTACT);
   };
 
-  const handleFormSubmit = (e) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
     const formData = new FormData(e.target);
     const formObject = {
-      id: Date.now().toString(),
       fullName: formData.get('fullName'),
       mobile: formData.get('mobile'),
       state: formData.get('state'),
@@ -43,24 +46,23 @@ const Home = () => {
       taluka: formData.get('taluka'),
       village: formData.get('village'),
       pincode: formData.get('pincode'),
-      submittedAt: new Date().toISOString(),
     };
 
-    // Get existing submissions from localStorage
-    const existingSubmissions = localStorage.getItem('contactFormSubmissions');
-    const submissions = existingSubmissions ? JSON.parse(existingSubmissions) : [];
-    
-    // Add new submission
-    submissions.push(formObject);
-    
-    // Save back to localStorage
-    localStorage.setItem('contactFormSubmissions', JSON.stringify(submissions));
+    try {
+      const { contactAPI } = await import('../../services/api');
+      const response = await contactAPI.submit(formObject);
 
-    // Reset form
-    e.target.reset();
+      // Reset form
+      e.target.reset();
 
-    // Show success message
-    alert('Thank you! Your form has been submitted successfully.');
+      // Show success message
+      alert('Thank you! Your form has been submitted successfully.');
+    } catch (error) {
+      console.error('Form submission error:', error);
+      alert('Error submitting form. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -358,8 +360,8 @@ const Home = () => {
             </div>
 
             <div className="form-submit">
-              <button type="submit" className="submit-button">
-                Submit
+              <button type="submit" className="submit-button" disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting...' : 'Submit'}
               </button>
             </div>
           </form>
