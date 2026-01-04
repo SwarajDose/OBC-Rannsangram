@@ -5,6 +5,7 @@ export const ROUTES = {
   HOME: '/',
   CONTACT: '/contact',
   ADMIN: '/admin',
+  ADMIN_LOGIN: '/admin/login',
 };
 
 /**

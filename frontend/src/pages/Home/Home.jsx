@@ -26,6 +26,43 @@ const Home = () => {
     scrollToSection(SECTIONS.ABOUT);
   };
 
+  const handleGetInvolvedClick = (e) => {
+    e.preventDefault();
+    scrollToSection(SECTIONS.CONTACT);
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const formObject = {
+      id: Date.now().toString(),
+      fullName: formData.get('fullName'),
+      mobile: formData.get('mobile'),
+      state: formData.get('state'),
+      district: formData.get('district'),
+      taluka: formData.get('taluka'),
+      village: formData.get('village'),
+      pincode: formData.get('pincode'),
+      submittedAt: new Date().toISOString(),
+    };
+
+    // Get existing submissions from localStorage
+    const existingSubmissions = localStorage.getItem('contactFormSubmissions');
+    const submissions = existingSubmissions ? JSON.parse(existingSubmissions) : [];
+    
+    // Add new submission
+    submissions.push(formObject);
+    
+    // Save back to localStorage
+    localStorage.setItem('contactFormSubmissions', JSON.stringify(submissions));
+
+    // Reset form
+    e.target.reset();
+
+    // Show success message
+    alert('Thank you! Your form has been submitted successfully.');
+  };
+
   return (
     <div className="home-page">
       <section id="hero" className="hero-section" style={{ backgroundImage: `url(${heroImage})` }}>
@@ -38,9 +75,9 @@ const Home = () => {
             OBC Runsangram Organization is dedicated to the protection, development, and empowerment of Other Backward Classes, Nomadic & Denotified Tribes, Alutedar, Balutedar, and Micro-OBC communities — socially, economically, educationally, and politically.
           </p>
           <div className="hero-cta">
-            <Link to={ROUTES.CONTACT} className="cta-button primary">
+            <a href={`#${SECTIONS.CONTACT}`} onClick={handleGetInvolvedClick} className="cta-button primary">
               Get Involved
-            </Link>
+            </a>
             <a href={`#${SECTIONS.ABOUT}`} onClick={handleLearnMoreClick} className="cta-button secondary">
               Learn More
             </a>
@@ -230,7 +267,7 @@ const Home = () => {
           <p className="contact-subtitle">
             Get in touch with us. Fill out the form below and we'll get back to you as soon as possible.
           </p>
-          <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+          <form className="contact-form" onSubmit={handleFormSubmit}>
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="fullName" className="form-label">Full Name *</label>

@@ -138,7 +138,7 @@ const Footer = () => {
                 <a href="#" className="footer-link">Disclaimer</a>
               </li>
               <li>
-                <Link to="/admin" className="footer-link admin-link">
+                <Link to="/admin/login" className="footer-link admin-link">
                   <FaUserShield className="admin-icon" />
                   Admin Panel
                 </Link>
