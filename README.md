@@ -89,9 +89,3 @@ npm run dev
 - `DELETE /api/contact/submissions/:id` - Delete a submission (Admin only).
 - `POST /api/auth/login` - Admin login.
 - `GET /api/auth/verify` - Verify admin token.
-
-## 🤝 Contributing
-Contributions are welcome! Please fork the repository and create a pull request.
-
-## 📄 License
-This project is licensed under the MIT License.
