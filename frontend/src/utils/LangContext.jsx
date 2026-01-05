@@ -23,9 +23,23 @@ export const LangProvider = ({ children }) => {
       .then((data) => {
         if (!isMounted) return;
 
-        // 🔒 Validate minimum required keys
-        if (!data.nav || !data.footer) {
-          throw new Error('Invalid language schema');
+        // 🔒 STRICT schema validation
+        const requiredKeys = [
+          'nav',
+          'footer',
+          'hero',
+          'about',
+          'objectives',
+          'contact',
+          'queries'
+        ];
+
+        const missing = requiredKeys.filter((key) => !data[key]);
+
+        if (missing.length > 0) {
+          throw new Error(
+            `Invalid language schema. Missing: ${missing.join(', ')}`
+          );
         }
 
         setContent(data);
@@ -38,7 +52,7 @@ export const LangProvider = ({ children }) => {
           localStorage.setItem('lang', DEFAULT_LANG);
           setLang(DEFAULT_LANG);
         } else {
-          // Even English failed → app is broken, stop pretending
+          // Even English failed → app is broken, stop rendering
           setContent(null);
           setLoading(false);
         }

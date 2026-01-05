@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext } from "react";
 import {
   FaUsers,
   FaHandsHelping,
@@ -12,13 +12,13 @@ import {
   FaHeartbeat,
   FaFemale,
   FaVoteYea,
-  FaMonument
-} from 'react-icons/fa';
-import heroImage from '../../assets/hero-community.jpg';
-import { scrollToSection } from '../../utils/scrollToSection';
-import { SECTIONS } from '../../constants/routes';
-import { LangContext } from '../../utils/LangContext';
-import './Home.css';
+  FaMonument,
+} from "react-icons/fa";
+import heroImage from "../../assets/hero-community.jpg";
+import { scrollToSection } from "../../utils/scrollToSection";
+import { SECTIONS } from "../../constants/routes";
+import { LangContext } from "../../utils/LangContext";
+import "./Home.css";
 
 const Home = () => {
   const { content } = useContext(LangContext);
@@ -45,7 +45,7 @@ const Home = () => {
     const formObject = Object.fromEntries(formData.entries());
 
     try {
-      const { contactAPI } = await import('../../services/api');
+      const { contactAPI } = await import("../../services/api");
       await contactAPI.submit(formObject);
       e.target.reset();
       alert(content.alerts.success);
@@ -59,7 +59,6 @@ const Home = () => {
 
   return (
     <div className="home-page">
-
       {/* HERO */}
       <section
         id="hero"
@@ -123,14 +122,16 @@ const Home = () => {
           {/* COMMUNITIES */}
           <section className="communities-section">
             <h2 className="section-title">{content.communities.title}</h2>
-            <p className="communities-subtitle">{content.communities.subtitle}</p>
+            <p className="communities-subtitle">
+              {content.communities.subtitle}
+            </p>
 
             <div className="communities-grid">
               {[
                 { icon: <FaUsers />, text: content.communities.obc },
                 { icon: <FaHandsHelping />, text: content.communities.nomadic },
                 { icon: <FaUserFriends />, text: content.communities.alutedar },
-                { icon: <FaUsersCog />, text: content.communities.micro }
+                { icon: <FaUsersCog />, text: content.communities.micro },
               ].map((item, i) => (
                 <div className="community-card" key={i}>
                   <div className="community-icon-wrapper">
@@ -145,22 +146,61 @@ const Home = () => {
       </section>
 
       {/* OBJECTIVES */}
-      <section id={SECTIONS.OBJECTIVES} className="objectives-section-standalone">
+      <section
+        id={SECTIONS.OBJECTIVES}
+        className="objectives-section-standalone"
+      >
         <div className="objectives-container">
           <h2 className="section-title">{content.objectives.title}</h2>
           <p className="objectives-subtitle">{content.objectives.subtitle}</p>
 
           <div className="objectives-grid">
             {[
-              [<FaShieldAlt />, content.objectives.reservationTitle, content.objectives.reservationDesc],
-              [<FaCertificate />, content.objectives.fakeCertTitle, content.objectives.fakeCertDesc],
-              [<FaGraduationCap />, content.objectives.educationTitle, content.objectives.educationDesc],
-              [<FaChartLine />, content.objectives.economicTitle, content.objectives.economicDesc],
-              [<FaGavel />, content.objectives.legalTitle, content.objectives.legalDesc],
-              [<FaHeartbeat />, content.objectives.healthTitle, content.objectives.healthDesc],
-              [<FaFemale />, content.objectives.womenTitle, content.objectives.womenDesc],
-              [<FaVoteYea />, content.objectives.politicalTitle, content.objectives.politicalDesc],
-              [<FaMonument />, content.objectives.culturalTitle, content.objectives.culturalDesc]
+              [
+                <FaShieldAlt />,
+                content.objectives.reservationTitle,
+                content.objectives.reservationDesc,
+              ],
+              [
+                <FaCertificate />,
+                content.objectives.fakeCertTitle,
+                content.objectives.fakeCertDesc,
+              ],
+              [
+                <FaGraduationCap />,
+                content.objectives.educationTitle,
+                content.objectives.educationDesc,
+              ],
+              [
+                <FaChartLine />,
+                content.objectives.economicTitle,
+                content.objectives.economicDesc,
+              ],
+              [
+                <FaGavel />,
+                content.objectives.legalTitle,
+                content.objectives.legalDesc,
+              ],
+              [
+                <FaHeartbeat />,
+                content.objectives.healthTitle,
+                content.objectives.healthDesc,
+              ],
+              [
+                <FaFemale />,
+                content.objectives.womenTitle,
+                content.objectives.womenDesc,
+              ],
+              [
+                <FaVoteYea />,
+                content.objectives.politicalTitle,
+                content.objectives.politicalDesc,
+              ],
+              [
+                <FaMonument />,
+                content.objectives.culturalTitle,
+                content.objectives.culturalDesc,
+              ],
             ].map(([icon, title, desc], i) => (
               <div className="objective-card" key={i}>
                 <div className="objective-icon-wrapper">
@@ -174,6 +214,66 @@ const Home = () => {
         </div>
       </section>
 
+      {/* QUERIES */}
+<section id={SECTIONS.QUERIES} className="queries-section">
+  <div className="queries-container">
+    <h2 className="section-title">{content.queries.title}</h2>
+
+    <p className="queries-subtitle">
+      {content.queries.subtitle}
+    </p>
+
+    <form className="queries-form">
+      <div className="form-row">
+        <div className="form-group">
+          <label className="form-label">
+            {content.queries.fullName}
+          </label>
+          <input
+            type="text"
+            name="fullName"
+            className="form-input"
+            placeholder={content.queries.fullNamePh}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">
+            {content.queries.mobile}
+          </label>
+          <input
+            type="tel"
+            name="mobile"
+            className="form-input"
+            placeholder={content.queries.mobilePh}
+            required
+          />
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label className="form-label">
+          {content.queries.query}
+        </label>
+        <textarea
+          name="query"
+          className="form-textarea"
+          placeholder={content.queries.queryPh}
+          required
+        />
+      </div>
+
+      <div className="form-submit">
+        <button type="submit" className="submit-button">
+          {content.queries.submit}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+
       {/* CONTACT */}
       <section id={SECTIONS.CONTACT} className="contact-section">
         <div className="contact-container">
@@ -184,50 +284,90 @@ const Home = () => {
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">{content.contact.fullName}</label>
-                <input className="form-input" name="fullName" placeholder={content.contact.fullNamePh} required />
+                <input
+                  className="form-input"
+                  name="fullName"
+                  placeholder={content.contact.fullNamePh}
+                  required
+                />
               </div>
               <div className="form-group">
                 <label className="form-label">{content.contact.mobile}</label>
-                <input className="form-input" name="mobile" placeholder={content.contact.mobilePh} required />
+                <input
+                  className="form-input"
+                  name="mobile"
+                  placeholder={content.contact.mobilePh}
+                  required
+                />
               </div>
             </div>
 
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">{content.contact.state}</label>
-                <input className="form-input" name="state" placeholder={content.contact.statePh} required />
+                <input
+                  className="form-input"
+                  name="state"
+                  placeholder={content.contact.statePh}
+                  required
+                />
               </div>
               <div className="form-group">
                 <label className="form-label">{content.contact.district}</label>
-                <input className="form-input" name="district" placeholder={content.contact.districtPh} required />
+                <input
+                  className="form-input"
+                  name="district"
+                  placeholder={content.contact.districtPh}
+                  required
+                />
               </div>
             </div>
 
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">{content.contact.taluka}</label>
-                <input className="form-input" name="taluka" placeholder={content.contact.talukaPh} required />
+                <input
+                  className="form-input"
+                  name="taluka"
+                  placeholder={content.contact.talukaPh}
+                  required
+                />
               </div>
               <div className="form-group">
                 <label className="form-label">{content.contact.village}</label>
-                <input className="form-input" name="village" placeholder={content.contact.villagePh} required />
+                <input
+                  className="form-input"
+                  name="village"
+                  placeholder={content.contact.villagePh}
+                  required
+                />
               </div>
             </div>
 
             <div className="form-group">
               <label className="form-label">{content.contact.pincode}</label>
-              <input className="form-input" name="pincode" placeholder={content.contact.pincodePh} required />
+              <input
+                className="form-input"
+                name="pincode"
+                placeholder={content.contact.pincodePh}
+                required
+              />
             </div>
 
             <div className="form-submit">
-              <button type="submit" className="submit-button" disabled={isSubmitting}>
-                {isSubmitting ? content.contact.submitting : content.contact.submit}
+              <button
+                type="submit"
+                className="submit-button"
+                disabled={isSubmitting}
+              >
+                {isSubmitting
+                  ? content.contact.submitting
+                  : content.contact.submit}
               </button>
             </div>
           </form>
         </div>
       </section>
-
     </div>
   );
 };

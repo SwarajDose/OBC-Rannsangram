@@ -94,6 +94,7 @@
   "nav": {
   "home": "Home",
   "about": "About",
+  "queries": "Queries",
   "contact": "Contact",
   "getInTouch": "Get in Touch"
 },
@@ -116,5 +117,24 @@
   "admin": "Admin Panel",
   "rights": "OBC Rann Sangram Organization. All rights reserved.",
   "tagline": "Empowering OBC Communities Through Unity & Action"
+},
+"queries": {
+  "title": "Queries",
+  "subtitle": "Have a question or concern? Reach out to us and we’ll respond as soon as possible.",
+
+  "fullName": "Full Name *",
+  "fullNamePh": "Enter your full name",
+
+  "mobile": "Mobile Number *",
+  "mobilePh": "Enter your mobile number",
+
+  "query": "Your Query *",
+  "queryPh": "Write your query here...",
+
+  "submit": "Submit Query",
+  "submitting": "Submitting..."
+
+
 }
+
 }

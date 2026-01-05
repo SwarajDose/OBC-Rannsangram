@@ -13,21 +13,25 @@ const Header = () => {
 
   const { content, lang, loading, changeLang } = useContext(LangContext);
 
-  // 🔒 Don’t render until language is ready
+  // ⛔ Hard stop until language is ready
   if (loading || !content?.nav) return null;
 
   const handleHomeClick = (e) => {
     e.preventDefault();
+
     if (location.pathname === ROUTES.HOME) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       navigate(ROUTES.HOME);
-      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 120);
     }
   };
 
   const handleScroll = (e, section) => {
     e.preventDefault();
+
     if (location.pathname === ROUTES.HOME) {
       scrollToSection(section);
     } else {
@@ -41,7 +45,7 @@ const Header = () => {
 
         {/* Logo */}
         <div className="logo-container">
-          <Link to="/" className="logo-link" onClick={handleHomeClick}>
+          <Link to={ROUTES.HOME} className="logo-link" onClick={handleHomeClick}>
             <img
               src={logo}
               alt="OBC Rann Sangram Logo"
@@ -54,7 +58,11 @@ const Header = () => {
         <nav className="nav">
           <ul className="nav-list">
             <li className="nav-item">
-              <a href="#" onClick={handleHomeClick} className="nav-link">
+              <a
+                href={ROUTES.HOME}
+                onClick={handleHomeClick}
+                className="nav-link"
+              >
                 {content.nav.home}
               </a>
             </li>
@@ -66,6 +74,16 @@ const Header = () => {
                 className="nav-link"
               >
                 {content.nav.about}
+              </a>
+            </li>
+
+            <li className="nav-item">
+              <a
+                href={`#${SECTIONS.QUERIES}`}
+                onClick={(e) => handleScroll(e, SECTIONS.QUERIES)}
+                className="nav-link"
+              >
+                {content.nav.queries}
               </a>
             </li>
 
@@ -87,7 +105,7 @@ const Header = () => {
             <div className="lang-switcher-wrapper">
               <select
                 className="lang-switcher"
-                value={lang}           // ✅ controlled
+                value={lang}
                 onChange={(e) => changeLang(e.target.value)}
               >
                 <option value="en">EN</option>

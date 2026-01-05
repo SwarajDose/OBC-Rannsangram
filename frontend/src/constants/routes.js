@@ -14,6 +14,6 @@ export const ROUTES = {
 export const SECTIONS = {
   ABOUT: 'about-us',
   OBJECTIVES: 'objectives-section',
+  QUERIES: 'queries-section',   // ✅ ADDED
   CONTACT: 'contact-us',
 };
-
