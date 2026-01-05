@@ -1,0 +1,120 @@
+{
+  "alerts": {
+    "success": "Thank you! Your form has been submitted successfully.",
+    "error": "Error submitting form. Please try again later."
+  },
+
+  "hero": {
+    "title": "Empowering OBC Communities Through Unity & Action",
+    "subtitle": "OBC Runsangram Organization is dedicated to the protection, development, and empowerment of Other Backward Classes, Nomadic & Denotified Tribes, Alutedar, Balutedar, and Micro-OBC communities — socially, economically, educationally, and politically.",
+    "getInvolved": "Get Involved",
+    "learnMore": "Learn More"
+  },
+
+  "about": {
+    "heading": "ABOUT US",
+    "whoWeAre": "Who We Are",
+    "para1": "OBC Runsangram Organization is a social and political movement dedicated to the protection, development, and empowerment of the Other Backward Classes (OBC) and allied marginalized communities.",
+    "para2": "We function based on constitutional values and actively work for the social, economic, educational, and political upliftment of OBC society. Our organization brings together diverse OBC groups to address their challenges and fight injustice collectively.",
+    "visionTitle": "Our Vision",
+    "visionText": "To create an empowered, educated, and economically strong OBC community that participates actively in nation-building while preserving its cultural identity and constitutional rights.",
+    "missionTitle": "Our Mission",
+    "missionText": "To protect reservation rights, provide educational support, offer legal assistance, and empower OBC communities through comprehensive development programs and political representation."
+  },
+
+  "communities": {
+    "title": "Communities We Represent",
+    "subtitle": "We represent and work for the welfare of diverse communities that fall under the Other Backward Classes category.",
+    "obc": "Other Backward Classes (OBC)",
+    "nomadic": "Nomadic & Vimukta Jatis",
+    "alutedar": "Alutedar & Balutedar",
+    "micro": "Micro OBC Communities"
+  },
+
+  "objectives": {
+    "title": "Working for Community Welfare",
+    "subtitle": "We are committed to the holistic development of OBC communities through these key initiatives, ensuring progress in every aspect of life.",
+
+    "reservationTitle": "Reservation Protection",
+    "reservationDesc": "Safeguarding and strengthening the constitutional reservation benefits for OBC communities in education, employment, and governance.",
+
+    "fakeCertTitle": "Fake Caste Certificate Control",
+    "fakeCertDesc": "Working to eliminate the menace of fake caste certificates that deprive genuine OBC candidates of their rightful opportunities.",
+
+    "educationTitle": "Educational Support",
+    "educationDesc": "Comprehensive educational initiatives to ensure OBC students have access to quality education and career opportunities.",
+
+    "economicTitle": "Economic Empowerment",
+    "economicDesc": "Programs designed to improve the economic condition of OBC communities through skill development and entrepreneurship.",
+
+    "legalTitle": "Legal Assistance",
+    "legalDesc": "Providing legal aid and advocacy to community members facing discrimination, rights violations, or legal challenges.",
+
+    "healthTitle": "Health & Welfare Programs",
+    "healthDesc": "Healthcare initiatives and welfare programs to ensure the physical and mental well-being of community members.",
+
+    "womenTitle": "Women Empowerment",
+    "womenDesc": "Special focus on uplifting women in OBC communities through education, skill development, and leadership opportunities.",
+
+    "politicalTitle": "Political Representation",
+    "politicalDesc": "Encouraging active political participation and ensuring adequate representation of OBC communities in governance.",
+
+    "culturalTitle": "Cultural Preservation",
+    "culturalDesc": "Celebrating and preserving the rich cultural heritage, traditions, and identity of various OBC communities."
+  },
+
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch with us. Fill out the form below and we'll get back to you as soon as possible.",
+
+    "fullName": "Full Name *",
+    "fullNamePh": "Enter your full name",
+
+    "mobile": "Mobile Number *",
+    "mobilePh": "Enter your mobile number",
+
+    "state": "State *",
+    "statePh": "Enter your state",
+
+    "district": "District *",
+    "districtPh": "Enter your district",
+
+    "taluka": "Taluka *",
+    "talukaPh": "Enter your taluka",
+
+    "village": "Village *",
+    "villagePh": "Enter your village",
+
+    "pincode": "Pincode *",
+    "pincodePh": "Enter your pincode",
+
+    "submit": "Submit",
+    "submitting": "Submitting..."
+  },
+  "nav": {
+  "home": "Home",
+  "about": "About",
+  "contact": "Contact",
+  "getInTouch": "Get in Touch"
+},
+
+"footer": {
+  "description": "OBC Runsangram Organization is dedicated to the protection, development, and empowerment of Other Backward Classes, Nomadic & Denotified Tribes, and allied marginalized communities.",
+  "quickLinks": "Quick Links",
+  "home": "Home",
+  "about": "About Us",
+  "objectives": "Our Objectives",
+  "contact": "Contact Us",
+  "contactTitle": "Contact Us",
+  "phone": "+91 XXXXX XXXXX",
+  "email": "info@obcrannsangram.org",
+  "address": "Mumbai, Maharashtra, India",
+  "importantLinks": "Important Links",
+  "privacy": "Privacy Policy",
+  "terms": "Terms & Conditions",
+  "disclaimer": "Disclaimer",
+  "admin": "Admin Panel",
+  "rights": "OBC Rann Sangram Organization. All rights reserved.",
+  "tagline": "Empowering OBC Communities Through Unity & Action"
+}
+}

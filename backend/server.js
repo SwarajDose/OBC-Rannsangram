@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 
 const contactRoutes = require('./routes/contact');
@@ -37,9 +39,25 @@ app.use((err, req, res, next) => {
   });
 });
 
+// fetch-language
+
+app.get('/api/lang/:lang', (req, res) => {
+  const lang = req.params.lang;
+  const filePath = path.join(__dirname, 'locales', `${lang}.json`);
+
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ error: 'Language not supported' });
+  }
+
+  const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  res.json(data);
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📡 API endpoints available at http://localhost:${PORT}/api`);
 });
+
+
 
