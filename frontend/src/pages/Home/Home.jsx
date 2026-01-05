@@ -26,6 +26,7 @@ const Home = () => {
   if (!content || !content.hero) return null;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isQuerySubmitting, setIsQuerySubmitting] = useState(false);
 
   const handleLearnMoreClick = (e) => {
     e.preventDefault();
@@ -37,7 +38,7 @@ const Home = () => {
     scrollToSection(SECTIONS.CONTACT);
   };
 
-  const handleFormSubmit = async (e) => {
+  const handleContactSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -54,6 +55,26 @@ const Home = () => {
       alert(content.alerts.error);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleQuerySubmit = async (e) => {
+    e.preventDefault();
+    setIsQuerySubmitting(true);
+
+    const formData = new FormData(e.target);
+    const queryObject = Object.fromEntries(formData.entries());
+
+    try {
+      const { queryAPI } = await import('../../services/api');
+      await queryAPI.submit(queryObject);
+      e.target.reset();
+      alert(content.alerts.success);
+    } catch (err) {
+      console.error(err);
+      alert(content.alerts.error);
+    } finally {
+      setIsQuerySubmitting(false);
     }
   };
 
@@ -174,13 +195,67 @@ const Home = () => {
         </div>
       </section>
 
+      {/* QUERIES */}
+      <section className="contact-section">
+        <div className="contact-container">
+          <h2 className="section-title">{content.queries.title}</h2>
+          <p className="contact-subtitle">{content.queries.subtitle}</p>
+
+          <form className="contact-form" onSubmit={handleQuerySubmit}>
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">{content.queries.fullName}</label>
+                <input
+                  className="form-input"
+                  name="fullName"
+                  placeholder={content.queries.fullNamePh}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">{content.queries.mobile}</label>
+                <input
+                  className="form-input"
+                  name="mobile"
+                  placeholder={content.queries.mobilePh}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">{content.queries.query}</label>
+              <textarea
+                className="form-input form-textarea"
+                name="query"
+                placeholder={content.queries.queryPh}
+                required
+              />
+            </div>
+
+            <div className="form-submit">
+              <button
+                type="submit"
+                className="submit-button"
+                disabled={isQuerySubmitting}
+              >
+                {isQuerySubmitting
+                  ? content.queries.submitting
+                  : content.queries.submit}
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
       {/* CONTACT */}
       <section id={SECTIONS.CONTACT} className="contact-section">
         <div className="contact-container">
           <h2 className="section-title">{content.contact.title}</h2>
           <p className="contact-subtitle">{content.contact.subtitle}</p>
 
-          <form className="contact-form" onSubmit={handleFormSubmit}>
+          <form className="contact-form" onSubmit={handleContactSubmit}>
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">{content.contact.fullName}</label>
