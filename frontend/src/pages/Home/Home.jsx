@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import stateDistrictData from "../../utils/stateDistrictData";
 import {
   FaUsers,
   FaHandsHelping,
@@ -26,10 +27,17 @@ const Home = () => {
   if (!content || !content.hero) return null;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [selectedState, setSelectedState] = useState("");
+  const [availableDistricts, setAvailableDistricts] = useState([]);
   const handleLearnMoreClick = (e) => {
     e.preventDefault();
     scrollToSection(SECTIONS.ABOUT);
+  };
+
+  const handleStateChange = (e) => {
+    const state = e.target.value;
+    setSelectedState(state);
+    setAvailableDistricts(stateDistrictData[state] || []);
   };
 
   const handleGetInvolvedClick = (e) => {
@@ -215,64 +223,55 @@ const Home = () => {
       </section>
 
       {/* QUERIES */}
-<section id={SECTIONS.QUERIES} className="queries-section">
-  <div className="queries-container">
-    <h2 className="section-title">{content.queries.title}</h2>
+      <section id={SECTIONS.QUERIES} className="queries-section">
+        <div className="queries-container">
+          <h2 className="section-title">{content.queries.title}</h2>
 
-    <p className="queries-subtitle">
-      {content.queries.subtitle}
-    </p>
+          <p className="queries-subtitle">{content.queries.subtitle}</p>
 
-    <form className="queries-form">
-      <div className="form-row">
-        <div className="form-group">
-          <label className="form-label">
-            {content.queries.fullName}
-          </label>
-          <input
-            type="text"
-            name="fullName"
-            className="form-input"
-            placeholder={content.queries.fullNamePh}
-            required
-          />
+          <form className="queries-form">
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">{content.queries.fullName}</label>
+                <input
+                  type="text"
+                  name="fullName"
+                  className="form-input"
+                  placeholder={content.queries.fullNamePh}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">{content.queries.mobile}</label>
+                <input
+                  type="tel"
+                  name="mobile"
+                  className="form-input"
+                  placeholder={content.queries.mobilePh}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">{content.queries.query}</label>
+              <textarea
+                name="query"
+                className="form-textarea"
+                placeholder={content.queries.queryPh}
+                required
+              />
+            </div>
+
+            <div className="form-submit">
+              <button type="submit" className="submit-button">
+                {content.queries.submit}
+              </button>
+            </div>
+          </form>
         </div>
-
-        <div className="form-group">
-          <label className="form-label">
-            {content.queries.mobile}
-          </label>
-          <input
-            type="tel"
-            name="mobile"
-            className="form-input"
-            placeholder={content.queries.mobilePh}
-            required
-          />
-        </div>
-      </div>
-
-      <div className="form-group">
-        <label className="form-label">
-          {content.queries.query}
-        </label>
-        <textarea
-          name="query"
-          className="form-textarea"
-          placeholder={content.queries.queryPh}
-          required
-        />
-      </div>
-
-      <div className="form-submit">
-        <button type="submit" className="submit-button">
-          {content.queries.submit}
-        </button>
-      </div>
-    </form>
-  </div>
-</section>
-
+      </section>
 
       {/* CONTACT */}
       <section id={SECTIONS.CONTACT} className="contact-section">
@@ -305,21 +304,36 @@ const Home = () => {
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">{content.contact.state}</label>
-                <input
+                <select
                   className="form-input"
                   name="state"
-                  placeholder={content.contact.statePh}
+                  value={selectedState}
+                  onChange={handleStateChange}
                   required
-                />
+                >
+                  <option value="">{content.contact.statePh}</option>
+                  {Object.keys(stateDistrictData).map((state) => (
+                    <option key={state} value={state}>
+                      {state}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="form-group">
                 <label className="form-label">{content.contact.district}</label>
-                <input
+                <select
                   className="form-input"
                   name="district"
-                  placeholder={content.contact.districtPh}
                   required
-                />
+                  disabled={!selectedState}
+                >
+                  <option value="">{content.contact.districtPh}</option>
+                  {availableDistricts.map((district) => (
+                    <option key={district} value={district}>
+                      {district}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
