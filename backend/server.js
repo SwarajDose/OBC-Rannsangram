@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const contactRoutes = require('./routes/contact');
 const authRoutes = require('./routes/auth');
+const queryRoutes = require('./routes/query');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,8 +19,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    success: true, 
+  res.json({
+    success: true,
     message: 'Server is running',
     timestamp: new Date().toISOString()
   });
@@ -28,14 +29,15 @@ app.get('/api/health', (req, res) => {
 // Routes
 app.use('/api/contact', contactRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/query', queryRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err);
-  res.status(500).json({ 
-    success: false, 
+  res.status(500).json({
+    success: false,
     message: 'Internal server error',
-    error: err.message 
+    error: err.message
   });
 });
 

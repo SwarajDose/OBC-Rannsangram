@@ -224,6 +224,10 @@
   flex-shrink: 0;
 }
 
+.phone-icon {
+  transform: scaleX(-1);
+}
+
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 2rem;
@@ -257,6 +261,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -331,4 +336,3 @@
     font-size: 1rem;
   }
 }
-

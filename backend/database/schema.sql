@@ -32,7 +32,18 @@ CREATE TABLE IF NOT EXISTS contact_submissions (
 
 -- Insert Default Admin (username: admin, password: admin123)
 -- Password is hashed using bcrypt (hash for 'admin123')
-INSERT INTO admins (username, password) 
 VALUES ('admin', '$2a$10$rOzJqZqZqZqZqZqZqZqZqOqZqZqZqZqZqZqZqZqZqZqZqZqZqZq')
 ON DUPLICATE KEY UPDATE username=username;
+
+-- Create Queries Table
+CREATE TABLE IF NOT EXISTS queries (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  full_name VARCHAR(100) NOT NULL,
+  mobile VARCHAR(15) NOT NULL,
+  message TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_mobile (mobile),
+  INDEX idx_created_at (created_at)
+);
 

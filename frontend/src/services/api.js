@@ -74,8 +74,31 @@ export const authAPI = {
   },
 };
 
+// Query Form API
+export const queryAPI = {
+  submit: async (formData) => {
+    return apiRequest('/query/submit', {
+      method: 'POST',
+      body: JSON.stringify(formData),
+    });
+  },
+
+  getAll: async () => {
+    return apiRequest('/query/submissions', {
+      method: 'GET',
+    });
+  },
+
+  delete: async (id) => {
+    return apiRequest(`/query/submissions/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
 export default {
   contactAPI,
   authAPI,
+  queryAPI,
 };
 

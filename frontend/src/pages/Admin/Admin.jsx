@@ -5,7 +5,9 @@ import './Admin.css';
 
 const Admin = () => {
   const navigate = useNavigate();
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]); // Contact submissions
+  const [queries, setQueries] = useState([]); // Query submissions
+  const [activeTab, setActiveTab] = useState('contact'); // 'contact' or 'query'
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [sortedUsers, setSortedUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,106 +18,17 @@ const Admin = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  
+
   // Sorting state
   const [sortField, setSortField] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
 
-  // Dummy data
-  const dummyData = [
-    {
-      id: '1',
-      fullName: 'Rajesh Kumar',
-      mobile: '9876543210',
-      state: 'Maharashtra',
-      district: 'Mumbai',
-      taluka: 'Mumbai City',
-      village: 'Andheri',
-      pincode: '400053',
-      submittedAt: new Date('2024-01-15T10:30:00').toISOString(),
-    },
-    {
-      id: '2',
-      fullName: 'Priya Sharma',
-      mobile: '9876543211',
-      state: 'Maharashtra',
-      district: 'Pune',
-      taluka: 'Pune City',
-      village: 'Kothrud',
-      pincode: '411038',
-      submittedAt: new Date('2024-01-16T14:20:00').toISOString(),
-    },
-    {
-      id: '3',
-      fullName: 'Amit Patel',
-      mobile: '9876543212',
-      state: 'Gujarat',
-      district: 'Ahmedabad',
-      taluka: 'Ahmedabad City',
-      village: 'Navrangpura',
-      pincode: '380009',
-      submittedAt: new Date('2024-01-17T09:15:00').toISOString(),
-    },
-    {
-      id: '4',
-      fullName: 'Sunita Devi',
-      mobile: '9876543213',
-      state: 'Maharashtra',
-      district: 'Thane',
-      taluka: 'Thane City',
-      village: 'Kopri',
-      pincode: '400603',
-      submittedAt: new Date('2024-01-18T11:45:00').toISOString(),
-    },
-    {
-      id: '5',
-      fullName: 'Vikram Singh',
-      mobile: '9876543214',
-      state: 'Maharashtra',
-      district: 'Nashik',
-      taluka: 'Nashik City',
-      village: 'Gangapur',
-      pincode: '422013',
-      submittedAt: new Date('2024-01-19T16:30:00').toISOString(),
-    },
-    {
-      id: '6',
-      fullName: 'Meera Joshi',
-      mobile: '9876543215',
-      state: 'Gujarat',
-      district: 'Surat',
-      taluka: 'Surat City',
-      village: 'Adajan',
-      pincode: '395009',
-      submittedAt: new Date('2024-01-20T13:20:00').toISOString(),
-    },
-    {
-      id: '7',
-      fullName: 'Ramesh Yadav',
-      mobile: '9876543216',
-      state: 'Maharashtra',
-      district: 'Mumbai',
-      taluka: 'Mumbai Suburban',
-      village: 'Borivali',
-      pincode: '400092',
-      submittedAt: new Date('2024-01-21T10:10:00').toISOString(),
-    },
-    {
-      id: '8',
-      fullName: 'Kavita Desai',
-      mobile: '9876543217',
-      state: 'Gujarat',
-      district: 'Vadodara',
-      taluka: 'Vadodara City',
-      village: 'Alkapuri',
-      pincode: '390007',
-      submittedAt: new Date('2024-01-22T15:00:00').toISOString(),
-    },
-  ];
+  // Dummy data removed
+
 
   useEffect(() => {
     // Check authentication
@@ -128,26 +41,37 @@ const Admin = () => {
     // Verify token and load data
     const loadData = async () => {
       try {
-        const { authAPI, contactAPI } = await import('../../services/api');
-        
+        const { authAPI, contactAPI, queryAPI } = await import('../../services/api');
+
         // Verify token
         await authAPI.verify();
-        
-        // Load submissions from API
-        const response = await contactAPI.getAll();
-        
-        if (response.success) {
-          // Merge dummy data with API data (dummy data first)
-          const allUsers = [...dummyData, ...response.data];
-          setUsers(allUsers);
-          setFilteredUsers(allUsers);
+
+        // Load contact submissions
+        const contactResponse = await contactAPI.getAll();
+        if (contactResponse.success) {
+          setUsers(contactResponse.data);
+          // Initialize filtered users with contact data if that's the active tab (default)
+          if (activeTab === 'contact') {
+            setFilteredUsers(contactResponse.data);
+          }
         }
+
+        // Load query submissions
+        const queryResponse = await queryAPI.getAll();
+        if (queryResponse.success) {
+          setQueries(queryResponse.data);
+          if (activeTab === 'query') {
+            setFilteredUsers(queryResponse.data);
+          }
+        }
+
       } catch (error) {
         console.error('Error loading data:', error);
-        // If API fails, use dummy data
-        setUsers(dummyData);
-        setFilteredUsers(dummyData);
-        
+        // If API fails, set empty list
+        setUsers([]);
+        setQueries([]);
+        setFilteredUsers([]);
+
         // If token is invalid, redirect to login
         if (error.message.includes('token') || error.message.includes('401')) {
           localStorage.removeItem('adminToken');
@@ -158,69 +82,77 @@ const Admin = () => {
     };
 
     loadData();
-  }, [navigate]);
+  }, [navigate, activeTab]); // Added activeTab to dependencies to re-evaluate filteredUsers on tab change
 
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminAuthenticated');
       localStorage.removeItem('adminLoginTime');
-      navigate('/admin/login');
+      navigate('/');
     }
   };
 
   useEffect(() => {
-    // Filter users based on search and filters
-    let filtered = [...users];
+    // Filter users/queries based on search and filters
+    let currentData = activeTab === 'contact' ? users : queries;
+    let filtered = [...currentData];
 
-    // Search filter - only on name
+    // Search filter - expanded to other fields
     if (searchTerm) {
+      const lowerTerm = searchTerm.toLowerCase();
       filtered = filtered.filter(user =>
-        user.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+        user.fullName.toLowerCase().includes(lowerTerm) ||
+        user.mobile.includes(lowerTerm) ||
+        (user.district && user.district.toLowerCase().includes(lowerTerm)) || // Check for existence
+        (user.taluka && user.taluka.toLowerCase().includes(lowerTerm)) ||     // Check for existence
+        (user.village && user.village.toLowerCase().includes(lowerTerm)) ||   // Check for existence
+        (user.pincode && user.pincode.includes(lowerTerm)) ||                 // Check for existence
+        (user.message && user.message.toLowerCase().includes(lowerTerm))      // For query tab
       );
     }
 
-    // State filter
-    if (filterState) {
+    // State filter (Contact only)
+    if (activeTab === 'contact' && filterState) {
       filtered = filtered.filter(user =>
-        user.state.toLowerCase() === filterState.toLowerCase()
+        user.state?.toLowerCase() === filterState.toLowerCase()
       );
     }
 
-    // District filter
-    if (filterDistrict) {
+    // District filter (Contact only)
+    if (activeTab === 'contact' && filterDistrict) {
       filtered = filtered.filter(user =>
-        user.district.toLowerCase() === filterDistrict.toLowerCase()
+        user.district?.toLowerCase() === filterDistrict.toLowerCase()
       );
     }
 
-    // Taluka filter
-    if (filterTaluka) {
+    // Taluka filter (Contact only)
+    if (activeTab === 'contact' && filterTaluka) {
       filtered = filtered.filter(user =>
-        user.taluka.toLowerCase() === filterTaluka.toLowerCase()
+        user.taluka?.toLowerCase() === filterTaluka.toLowerCase()
       );
     }
 
-    // Village filter
-    if (filterVillage) {
+    // Village filter (Contact only)
+    if (activeTab === 'contact' && filterVillage) {
       filtered = filtered.filter(user =>
-        user.village.toLowerCase() === filterVillage.toLowerCase()
+        user.village?.toLowerCase() === filterVillage.toLowerCase()
       );
     }
 
     setFilteredUsers(filtered);
     setCurrentPage(1); // Reset to first page when filters change
-  }, [searchTerm, filterState, filterDistrict, filterTaluka, filterVillage, users]);
+  }, [searchTerm, filterState, filterDistrict, filterTaluka, filterVillage, users, queries, activeTab]);
 
   // Sorting effect
   useEffect(() => {
     let sorted = [...filteredUsers];
-    
+
     if (sortField) {
       sorted.sort((a, b) => {
         let aValue = a[sortField];
         let bValue = b[sortField];
-        
+
         // Handle different data types
         if (sortField === 'submittedAt') {
           aValue = new Date(aValue);
@@ -229,7 +161,7 @@ const Admin = () => {
           aValue = aValue.toLowerCase();
           bValue = bValue.toLowerCase();
         }
-        
+
         if (sortDirection === 'asc') {
           return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
         } else {
@@ -237,26 +169,30 @@ const Admin = () => {
         }
       });
     }
-    
+
     setSortedUsers(sorted);
   }, [filteredUsers, sortField, sortDirection]);
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this submission?')) {
       try {
-        // Check if it's dummy data (string ID) or real data (numeric ID)
-        const userToDelete = users.find(user => user.id === id);
-        const isDummyData = typeof id === 'string' && id.length < 10;
-        
-        if (!isDummyData) {
-          // Delete from API
+        if (activeTab === 'contact') {
+          // Delete from Contact API
           const { contactAPI } = await import('../../services/api');
           await contactAPI.delete(id);
+
+          // Remove from users state
+          const updatedUsers = users.filter(user => user.id !== id);
+          setUsers(updatedUsers);
+        } else {
+          // Delete from Query API
+          const { queryAPI } = await import('../../services/api');
+          await queryAPI.delete(id);
+
+          // Remove from queries state
+          const updatedQueries = queries.filter(query => query.id !== id);
+          setQueries(updatedQueries);
         }
-        
-        // Remove from users state
-        const updatedUsers = users.filter(user => user.id !== id);
-        setUsers(updatedUsers);
       } catch (error) {
         console.error('Error deleting submission:', error);
         alert('Error deleting submission. Please try again.');
@@ -297,8 +233,8 @@ const Admin = () => {
     if (sortField !== field) {
       return <FaSort className="sort-icon" />;
     }
-    return sortDirection === 'asc' 
-      ? <FaSortUp className="sort-icon active" /> 
+    return sortDirection === 'asc'
+      ? <FaSortUp className="sort-icon active" />
       : <FaSortDown className="sort-icon active" />;
   };
 
@@ -331,11 +267,26 @@ const Admin = () => {
           <div className="admin-header-content">
             <div>
               <h1 className="admin-title">Admin Panel</h1>
-              <p className="admin-subtitle">Manage Contact Form Submissions</p>
+              <p className="admin-subtitle">Manage Contact Form Submissions and Queries</p>
             </div>
             <button className="logout-button" onClick={handleLogout} title="Logout">
               <FaSignOutAlt className="logout-icon" />
               Logout
+            </button>
+          </div>
+
+          <div className="admin-tabs">
+            <button
+              className={`admin-tab ${activeTab === 'contact' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('contact'); setCurrentPage(1); }}
+            >
+              Contact Submissions ({users.length})
+            </button>
+            <button
+              className={`admin-tab ${activeTab === 'query' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('query'); setCurrentPage(1); }}
+            >
+              Query Submissions ({queries.length})
             </button>
           </div>
         </div>
@@ -345,7 +296,7 @@ const Admin = () => {
             <FaSearch className="search-icon" />
             <input
               type="text"
-              placeholder="Search by name..."
+              placeholder="Search by name, mobile, district..."
               className="search-input"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -355,13 +306,15 @@ const Admin = () => {
           <button
             className="filter-toggle-btn"
             onClick={() => setShowFilters(!showFilters)}
+            disabled={activeTab !== 'contact'}
+            style={{ opacity: activeTab !== 'contact' ? 0.5 : 1 }}
           >
             <FaFilter className="filter-icon" />
             Filters
           </button>
         </div>
 
-        {showFilters && (
+        {showFilters && activeTab === 'contact' && (
           <div className="filters-panel">
             <div className="filter-group">
               <label className="filter-label">State</label>
@@ -434,73 +387,138 @@ const Admin = () => {
           <>
             <div className="users-table-container">
               <table className="users-table">
-              <thead>
-                <tr>
-                  <th onClick={() => handleSort('id')} className="sortable">
-                    <span>ID</span>
-                    {getSortIcon('id')}
-                  </th>
-                  <th onClick={() => handleSort('fullName')} className="sortable">
-                    <span>Full Name</span>
-                    {getSortIcon('fullName')}
-                  </th>
-                  <th onClick={() => handleSort('mobile')} className="sortable">
-                    <span>Mobile</span>
-                    {getSortIcon('mobile')}
-                  </th>
-                  <th onClick={() => handleSort('state')} className="sortable">
-                    <span>State</span>
-                    {getSortIcon('state')}
-                  </th>
-                  <th onClick={() => handleSort('district')} className="sortable">
-                    <span>District</span>
-                    {getSortIcon('district')}
-                  </th>
-                  <th onClick={() => handleSort('taluka')} className="sortable">
-                    <span>Taluka</span>
-                    {getSortIcon('taluka')}
-                  </th>
-                  <th onClick={() => handleSort('village')} className="sortable">
-                    <span>Village</span>
-                    {getSortIcon('village')}
-                  </th>
-                  <th onClick={() => handleSort('pincode')} className="sortable">
-                    <span>Pincode</span>
-                    {getSortIcon('pincode')}
-                  </th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-                <tbody>
-                  {currentUsers.map((user, index) => (
-                    <tr key={user.id}>
-                      <td>{startIndex + index + 1}</td>
-                      <td>{user.fullName}</td>
-                      <td>{user.mobile}</td>
-                      <td>{user.state}</td>
-                      <td>{user.district}</td>
-                      <td>{user.taluka}</td>
-                      <td>{user.village}</td>
-                      <td>{user.pincode}</td>
-                      <td className="actions-cell">
-                        <button
-                          className="action-btn view-btn"
-                          onClick={() => handleView(user)}
-                          title="View Details"
-                        >
-                          <FaEye />
-                        </button>
-                        <button
-                          className="action-btn delete-btn"
-                          onClick={() => handleDelete(user.id)}
-                          title="Delete"
-                        >
-                          <FaTrash />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                {activeTab === 'contact' ? (
+                  // Contact Table Header & Body
+                  <>
+                    <thead>
+                      <tr>
+                        <th onClick={() => handleSort('id')} className="sortable">
+                          <span>ID</span>
+                          {getSortIcon('id')}
+                        </th>
+                        <th onClick={() => handleSort('fullName')} className="sortable">
+                          <span>Full Name</span>
+                          {getSortIcon('fullName')}
+                        </th>
+                        <th onClick={() => handleSort('mobile')} className="sortable">
+                          <span>Mobile</span>
+                          {getSortIcon('mobile')}
+                        </th>
+                        <th onClick={() => handleSort('state')} className="sortable">
+                          <span>State</span>
+                          {getSortIcon('state')}
+                        </th>
+                        <th onClick={() => handleSort('district')} className="sortable">
+                          <span>District</span>
+                          {getSortIcon('district')}
+                        </th>
+                        <th onClick={() => handleSort('taluka')} className="sortable">
+                          <span>Taluka</span>
+                          {getSortIcon('taluka')}
+                        </th>
+                        <th onClick={() => handleSort('village')} className="sortable">
+                          <span>Village</span>
+                          {getSortIcon('village')}
+                        </th>
+                        <th onClick={() => handleSort('pincode')} className="sortable">
+                          <span>Pincode</span>
+                          {getSortIcon('pincode')}
+                        </th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {currentUsers.map((user, index) => (
+                        <tr key={user.id}>
+                          <td>{startIndex + index + 1}</td>
+                          <td>{user.fullName}</td>
+                          <td>{user.mobile}</td>
+                          <td>{user.state}</td>
+                          <td>{user.district}</td>
+                          <td>{user.taluka}</td>
+                          <td>{user.village}</td>
+                          <td>{user.pincode}</td>
+                          <td className="actions-cell">
+                            <button
+                              className="action-btn view-btn"
+                              onClick={() => handleView(user)}
+                              title="View Details"
+                            >
+                              <FaEye />
+                            </button>
+                            <button
+                              className="action-btn delete-btn"
+                              onClick={() => handleDelete(user.id)}
+                              title="Delete"
+                            >
+                              <FaTrash />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </>
+                ) : (
+                  // Query Table Header & Body
+                  <>
+                    <thead>
+                      <tr>
+                        <th onClick={() => handleSort('id')} className="sortable">
+                          <span>ID</span>
+                          {getSortIcon('id')}
+                        </th>
+                        <th onClick={() => handleSort('fullName')} className="sortable">
+                          <span>Full Name</span>
+                          {getSortIcon('fullName')}
+                        </th>
+                        <th onClick={() => handleSort('mobile')} className="sortable">
+                          <span>Mobile</span>
+                          {getSortIcon('mobile')}
+                        </th>
+                        <th onClick={() => handleSort('message')} className="sortable">
+                          <span>Message</span>
+                          {getSortIcon('message')}
+                        </th>
+                        <th onClick={() => handleSort('submittedAt')} className="sortable">
+                          <span>Submitted At</span>
+                          {getSortIcon('submittedAt')}
+                        </th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {currentUsers.map((user, index) => (
+                        <tr key={user.id}>
+                          <td>{startIndex + index + 1}</td>
+                          <td>{user.fullName}</td>
+                          <td>{user.mobile}</td>
+                          <td>
+                            <div className="message-cell" title={user.message}>
+                              {(user.message?.length || 0) > 50 ? user.message.substring(0, 50) + '...' : (user.message || '-')}
+                            </div>
+                          </td>
+                          <td>{new Date(user.submittedAt).toLocaleString()}</td>
+                          <td className="actions-cell">
+                            <button
+                              className="action-btn view-btn"
+                              onClick={() => handleView(user)}
+                              title="View Details"
+                            >
+                              <FaEye />
+                            </button>
+                            <button
+                              className="action-btn delete-btn"
+                              onClick={() => handleDelete(user.id)}
+                              title="Delete"
+                            >
+                              <FaTrash />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </>
+                )}
               </table>
             </div>
 
@@ -509,7 +527,7 @@ const Admin = () => {
               <div className="pagination-bottom-controls">
                 <div className="items-per-page-container-bottom">
                   <label className="items-per-page-label">Items Per Page:</label>
-                  <select 
+                  <select
                     className="items-per-page-select"
                     value={itemsPerPage}
                     onChange={handleItemsPerPageChange}
@@ -520,7 +538,7 @@ const Admin = () => {
                     <option value={50}>50</option>
                   </select>
                 </div>
-                
+
                 {totalPages > 1 && (
                   <div className="pagination-bottom-nav">
                     <button
@@ -530,7 +548,7 @@ const Admin = () => {
                     >
                       Previous
                     </button>
-                    
+
                     <div className="pagination-pages">
                       {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
                         if (
@@ -553,7 +571,7 @@ const Admin = () => {
                         return null;
                       })}
                     </div>
-                    
+
                     <button
                       className="pagination-btn"
                       onClick={() => handlePageChange(currentPage + 1)}
@@ -616,6 +634,12 @@ const Admin = () => {
                     {new Date(selectedUser.submittedAt).toLocaleString()}
                   </span>
                 </div>
+                {activeTab === 'query' && (
+                  <div className="detail-row message-row">
+                    <span className="detail-label">Message:</span>
+                    <span className="detail-value">{selectedUser.message}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>

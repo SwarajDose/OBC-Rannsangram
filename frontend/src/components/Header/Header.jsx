@@ -86,16 +86,6 @@ const Header = () => {
                 {content.nav.queries}
               </a>
             </li>
-
-            <li className="nav-item">
-              <a
-                href={`#${SECTIONS.CONTACT}`}
-                onClick={(e) => handleScroll(e, SECTIONS.CONTACT)}
-                className="nav-link"
-              >
-                {content.nav.contact}
-              </a>
-            </li>
           </ul>
 
           {/* Actions */}
@@ -108,9 +98,9 @@ const Header = () => {
                 value={lang}
                 onChange={(e) => changeLang(e.target.value)}
               >
-                <option value="en">EN</option>
-                <option value="hi">हिं</option>
-                <option value="mr">मर</option>
+                <option value="en">ENG</option>
+                <option value="hi">हिंदी</option>
+                <option value="mr">मराठी</option>
               </select>
             </div>
 

@@ -123,7 +123,7 @@ const Footer = () => {
             <h3 className="footer-heading">{content.footer.contactTitle}</h3>
             <ul className="footer-contact">
               <li className="contact-item">
-                <FaPhone className="contact-icon" />
+                <FaPhone className="contact-icon phone-icon" />
                 <span>{content.footer.phone}</span>
               </li>
               <li className="contact-item">

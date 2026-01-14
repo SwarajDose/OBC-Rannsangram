@@ -24,11 +24,11 @@ import "./Home.css";
 const Home = () => {
   const { content } = useContext(LangContext);
 
-  if (!content || !content.hero) return null;
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedState, setSelectedState] = useState("");
   const [availableDistricts, setAvailableDistricts] = useState([]);
+
+  if (!content || !content.hero) return null;
   const handleLearnMoreClick = (e) => {
     e.preventDefault();
     scrollToSection(SECTIONS.ABOUT);
@@ -55,6 +55,26 @@ const Home = () => {
     try {
       const { contactAPI } = await import("../../services/api");
       await contactAPI.submit(formObject);
+      e.target.reset();
+      alert(content.alerts.success);
+    } catch (err) {
+      console.error(err);
+      alert(content.alerts.error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleQuerySubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.target);
+    const formObject = Object.fromEntries(formData.entries());
+
+    try {
+      const { queryAPI } = await import("../../services/api");
+      await queryAPI.submit(formObject);
       e.target.reset();
       alert(content.alerts.success);
     } catch (err) {
@@ -229,7 +249,7 @@ const Home = () => {
 
           <p className="queries-subtitle">{content.queries.subtitle}</p>
 
-          <form className="queries-form">
+          <form className="queries-form" onSubmit={handleQuerySubmit}>
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">{content.queries.fullName}</label>
@@ -257,7 +277,7 @@ const Home = () => {
             <div className="form-group">
               <label className="form-label">{content.queries.query}</label>
               <textarea
-                name="query"
+                name="message"
                 className="form-textarea"
                 placeholder={content.queries.queryPh}
                 required
@@ -265,8 +285,8 @@ const Home = () => {
             </div>
 
             <div className="form-submit">
-              <button type="submit" className="submit-button">
-                {content.queries.submit}
+              <button type="submit" className="submit-button" disabled={isSubmitting}>
+                {isSubmitting ? content.queries.submitting : content.queries.submit}
               </button>
             </div>
           </form>
